@@ -339,7 +339,7 @@
             <!-- HASIL STATISTIK EVALUASI EKSEKUTIF -->
             <div class="analytics-results" id="analyticsVisualizerArea">
                 <div class="kpi-wrapper">
-                    <div class="kpi-metrics-label">Volume Akumulasi Kunjungan Individu</div>
+                    <div class="kpi-metrics-label">Jumlah Pengunjung Layanan</div>
                     <div class="kpi-metrics-value" id="valKpiGrandTotal">0</div>
                     <div class="kpi-temporal-info" id="labelTemporalScope">Data Terverifikasi Kamar Database Cloud</div>
                 </div>
@@ -565,7 +565,7 @@
             document.getElementById('analyticsVisualizerArea').style.display = 'block';
             document.getElementById('btnPrintTrigger').style.display = 'flex'; 
             document.getElementById('valKpiGrandTotal').innerText = collectiveSum.toLocaleString('id-ID');
-            document.getElementById('labelTemporalScope').innerText = "Cakupan Temporal Pelaporan: " + filterStartVal + " s.d " + filterEndVal;
+            document.getElementById('labelTemporalScope').innerText = "Rentang Waktu Mulai Dari: " + filterStartVal + " s.d " + filterEndVal;
 
             let processedSequence = opdRegistry.map(o => ({ id: o.id, icon: o.icon, val: internalMatrix[o.id] })).sort((a,b) => b.val - a.val);
 
