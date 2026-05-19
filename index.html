@@ -280,7 +280,7 @@
         <div class="header-container">
             <div class="brand-group">
                 <h1>Data Jumlah <span>Pengunjung</span></h1>
-                <p>Mal Pelayanan Publik Simpurusiang Kabupaten Luwu</p>
+                <p>Mal Pelayanan Publik Kabupaten Luwu</p>
             </div>
             <div class="nav-tabs">
                 <button class="nav-btn active" onclick="changeSection('input')" id="tabIncrementor"><i class="fa-solid fa-keyboard"></i> Entri Kuantitas</button>
@@ -312,7 +312,7 @@
         <!-- ================= INTERFAS 2: EKSTRAKSI DAN LAPORAN ANALITIS CLOUD ================= -->
         <section id="sectionReport" class="page-section">
             <div class="premium-panel">
-                <h3 class="section-title">Parameter Rentang Temporal</h3>
+                <h3 class="section-title">TENTUKAN RENTANG WAKTU</h3>
                 
                 <div class="filter-row">
                     <div class="input-group-premium">
@@ -327,7 +327,7 @@
 
                 <div class="action-button-group">
                     <button class="btn-executive btn-process" id="btnRunQuery" onclick="executeCloudQuery()">
-                        <span id="labelQueryBtn"><i class="fa-solid fa-chart-line"></i> SIMPAN DATA</span>
+                        <span id="labelQueryBtn"><i class="fa-solid fa-chart-line"></i> TAMPILKAN DATA</span>
                         <div class="loader-spinner" id="queryLoader"></div>
                     </button>
                     <button class="btn-executive btn-print-doc" id="btnPrintTrigger" style="display: none;" onclick="window.print()">
@@ -351,8 +351,8 @@
                 <div class="table-wrapper-premium">
                     <div class="table-row-premium table-header-premium">
                         <div class="col-rank">No</div>
-                        <div class="col-identity">Identitas Instansi Pelayanan / Tenant Gerai</div>
-                        <div class="col-quantity">Kuantitas</div>
+                        <div class="col-identity">Nama Gerai </div>
+                        <div class="col-quantity">Jumlah</div>
                     </div>
                     <div id="analyticsTableDataInjector">
                         <!-- Komponen Baris Hasil Injeksi -->
