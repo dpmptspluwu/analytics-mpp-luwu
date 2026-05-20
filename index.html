@@ -562,6 +562,15 @@
         }
 
         function compileAnalyticReporting(rawCollection) {
+            // --- MESIN PENERJEMAH TANGGAL INDONESIA ---
+            function ubahKeIndo(tglStr) {
+                if (!tglStr) return "-";
+                const namaBulan = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
+                let pecah = tglStr.split("-"); 
+                return parseInt(pecah[2]) + " " + namaBulan[parseInt(pecah[1]) - 1] + " " + pecah[0];
+            }
+            // ------------------------------------------
+
             let internalMatrix = {};
             opdRegistry.forEach(o => internalMatrix[o.id] = 0);
             let collectiveSum = 0;
@@ -590,7 +599,14 @@
             document.getElementById('analyticsVisualizerArea').style.display = 'block';
             document.getElementById('btnPrintTrigger').style.display = 'flex'; 
             document.getElementById('valKpiGrandTotal').innerText = collectiveSum.toLocaleString('id-ID');
-            document.getElementById('labelTemporalScope').innerText = "Rentang Waktu Mulai Dari: " + filterStartVal + " s.d " + filterEndVal;
+            
+            // --- MENAMPILKAN TANGGAL INDONESIA DENGAN HURUF TEBAL (BOLD) ---
+            let teksMulai = ubahKeIndo(filterStartVal);
+            let teksAkhir = ubahKeIndo(filterEndVal);
+            
+            // Kita gunakan innerHTML dan tag <strong> agar teks tanggal otomatis tebal
+            document.getElementById('labelTemporalScope').innerHTML = "Periode Laporan: <strong>" + teksMulai + " s.d. " + teksAkhir + "</strong>";
+            // ---------------------------------------------------------------
 
             let processedSequence = opdRegistry.map(o => ({ id: o.id, icon: o.icon, val: internalMatrix[o.id] })).sort((a,b) => b.val - a.val);
 
