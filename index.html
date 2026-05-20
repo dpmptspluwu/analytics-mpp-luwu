@@ -421,6 +421,7 @@
             document.getElementById('datetimeEnd').value = localDateStr;
 
             const grid = document.getElementById('cardContainerOPD');
+			opdRegistry.sort((a, b) => a.id.localeCompare(b.id));
             opdRegistry.forEach((opd, i) => {
                 grid.innerHTML += `
                     <div class="opd-card" id="cardOPD_${i}">
