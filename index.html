@@ -185,7 +185,7 @@
         }
 
         /* =========================================================================
-           👑 ULTRA-MODERN COLOURED PRINT ARCHITECTURE (2026 EDITION)
+           ðŸ‘‘ ULTRA-MODERN COLOURED PRINT ARCHITECTURE (2026 EDITION)
            ========================================================================= */
         @media print {
             @page {
@@ -269,25 +269,25 @@
 </head>
 <body>
 
-    <!-- NOTIFIKASI STATUS SINKRONISASI -->
-    <div id="dispatchToast" class="toast-dispatch">
-        <i class="fa-solid fa-circle-check"></i> 
-        <span>Sinkronisasi Data Berhasil Terlaksana!</span>
-    </div>
+		<!-- NOTIFIKASI STATUS SINKRONISASI -->
+		<div id="dispatchToast" class="toast-dispatch">
+			<i class="fa-solid fa-circle-check"></i> 
+			<span>Sinkronisasi Data Berhasil Terlaksana!</span>
+		</div>
 
-    <!-- PANEL UTAMA HEADER DAN KONTROL STRATEGIS -->
-    <header>
-        <div class="header-container">
-            <div class="brand-group">
-                <h1>Data Jumlah <span>Pengunjung</span></h1>
-                <p>Mal Pelayanan Publik Kabupaten Luwu</p>
-            </div>
-            <div class="nav-tabs">
-                <button class="nav-btn active" onclick="changeSection('input')" id="tabIncrementor"><i class="fa-solid fa-keyboard"></i> Entri Kuantitas</button>
-                <button class="nav-btn" onclick="changeSection('report')" id="tabSynthesizer"><i class="fa-solid fa-file-shield"></i> Analisis Laporan</button>
-            </div>
-        </div>
-    </header>
+		<!-- PANEL UTAMA HEADER DAN KONTROL STRATEGIS -->
+		<header>
+			<div class="header-container">
+				<div class="brand-group">
+					<h1>Data Jumlah <span>Pengunjung</span></h1>
+					<p>Mal Pelayanan Publik Kabupaten Luwu</p>
+				</div>
+				<div class="nav-tabs">
+					<button class="nav-btn active" onclick="changeSection('input')" id="tabIncrementor"><i class="fa-solid fa-keyboard"></i> Entri Kuantitas</button>
+					<button class="nav-btn" onclick="changeSection('report')" id="tabSynthesizer"><i class="fa-solid fa-file-shield"></i> Analisis Laporan</button>
+				</div>
+			</div>
+		</header>
 
 					<!-- AREA KONTEN UTAMA PERANGKAT -->
 					<main class="main-container">
@@ -400,14 +400,25 @@
 
         let barChartInstance = null;
 
-        window.onload = () => {
-            const currentDate = new Date();
-            document.getElementById('operasionalDate').valueAsDate = currentDate;
+        window.onload = () => { 
+		
+            const today = new Date();
             
-            let mondayOffset = new Date();
-            mondayOffset.setDate(currentDate.getDate() - (currentDate.getDay() === 0 ? 6 : currentDate.getDay() - 1));
-            document.getElementById('datetimeStart').valueAsDate = mondayOffset;
-            document.getElementById('datetimeEnd').valueAsDate = currentDate;
+            const year = today.getFullYear();
+            const month = String(today.getMonth() + 1).padStart(2, '0');
+            const day = String(today.getDate()).padStart(2, '0');
+            const localDateStr = `${year}-${month}-${day}`;
+
+            document.getElementById('operasionalDate').value = localDateStr;
+            
+            let mondayOffset = new Date(today);
+            mondayOffset.setDate(today.getDate() - (today.getDay() === 0 ? 6 : today.getDay() - 1));
+            const mYear = mondayOffset.getFullYear();
+            const mMonth = String(mondayOffset.getMonth() + 1).padStart(2, '0');
+            const mDay = String(mondayOffset.getDate()).padStart(2, '0');
+            
+            document.getElementById('datetimeStart').value = `${mYear}-${mMonth}-${mDay}`;
+            document.getElementById('datetimeEnd').value = localDateStr;
 
             const grid = document.getElementById('cardContainerOPD');
             opdRegistry.forEach((opd, i) => {
@@ -463,13 +474,16 @@
             opdRegistry.forEach((_, x) => currentTotal += (parseInt(document.getElementById('numField_'+x).value) || 0));
             document.getElementById('labelLiveCalculatedTotal').innerText = currentTotal.toLocaleString('id-ID');
         }
+     
+        let toastTimeout;
 
         function dispatchDataToCloud() {
             let totalVal = document.getElementById('labelLiveCalculatedTotal').innerText;
             if(totalVal === "0") return alert("Kuantitas entri tidak boleh nihil, bos.");
             
             const btn = document.getElementById('btnTriggerCloudSave');
-            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> TRANSMISI...`; btn.disabled = true;
+            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> TRANSMISI...`; 
+            btn.disabled = true;
 
             const packetPayload = { tanggal: document.getElementById('operasionalDate').value, detail: {} };
             opdRegistry.forEach((opd, i) => {
@@ -479,24 +493,34 @@
 
             fetch(GOOGLE_SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(packetPayload) })
             .then(() => {
-                document.getElementById('dispatchToast').classList.add('show');
-                setTimeout(() => { 
-					document.getElementById('dispatchToast').classList.add('show');
-					opdRegistry.forEach((_, i) => { document.getElementById('numField_'+i).value = ''; document.getElementById('cardOPD_'+i).classList.remove('active'); });
-					recalculateMetrics(0);
-					
-					// ?? KODE RESET PENCARIAN: Kembalikan kondisi input ke kosong dan panggil search untuk buka semua kartu
-					const searchField = document.getElementById('opdSearchInput');
-					if (searchField) {
-						searchField.value = '';
-						executeLocalSearch(); // Otomatis menampilkan kembali 22 gerai utuh
-					}
-					
-					btn.innerHTML = `<i class="fa-solid fa-cloud-arrow-up"></i> SINKRONISASI BASIS DATA`; btn.disabled = false;
-				}, 2200);
+                const toast = document.getElementById('dispatchToast');
+                toast.classList.add('show');
+                
+                if (toastTimeout) clearTimeout(toastTimeout);
+                
+                toastTimeout = setTimeout(() => { 
+                    toast.classList.remove('show'); // Paksa tarik toast ke atas
+                    
+                    opdRegistry.forEach((_, i) => { 
+                        document.getElementById('numField_'+i).value = ''; 
+                        document.getElementById('cardOPD_'+i).classList.remove('active'); 
+                    });
+                    recalculateMetrics(0);
+                    
+                    const searchBar = document.getElementById('opdSearchInput');
+                    if (searchBar) {
+                        searchBar.value = '';
+                        executeLocalSearch();
+                    }
+                    
+                    btn.innerHTML = `<i class="fa-solid fa-cloud-arrow-up"></i> SINKRONISASI BASIS DATA`; 
+                    btn.disabled = false;
+                }, 3000); 
+                
             }).catch(() => {
                 alert("Kegagalan tautan transmisi data ke awan."); 
-                btn.innerHTML = `<i class="fa-solid fa-cloud-arrow-up"></i> SINKRONISASI BASIS DATA`; btn.disabled = false;
+                btn.innerHTML = `<i class="fa-solid fa-cloud-arrow-up"></i> SINKRONISASI BASIS DATA`; 
+                btn.disabled = false;
             });
         }
 
@@ -592,7 +616,7 @@
 
             if(barChartInstance) barChartInstance.destroy();
 
-            /* 👑 RE-DESIGN 2026: PALET WARNA-WARNI PREMIUM TRENDY (ANTI JADUL MODERATING) */
+            /* ðŸ‘‘ RE-DESIGN 2026: PALET WARNA-WARNI PREMIUM TRENDY (ANTI JADUL MODERATING) */
             const modernColorPalette = [
                 '#1E3A8A', // Royal Blue
                 '#0D9488', // Deep Teal
