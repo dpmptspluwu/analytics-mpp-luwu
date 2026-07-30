@@ -255,22 +255,24 @@ function compileAnalyticReporting(rawCollection) {
     let formatEnd = formatTanggalPremium(filterEndVal);
     document.getElementById('labelTemporalScope').innerText = "PERIODE PELAPORAN: " + formatStart + " s.d. " + formatEnd;
 
+    // ?? Filter instansi yang kosong agar grafik dan tabel selaras
     let processedSequence = opdRegistry.map(o => ({ 
         id: o.id, icon: o.icon, 
         belopa: internalMatrix[o.id].belopa, 
         walmas: internalMatrix[o.id].walmas, 
         total: internalMatrix[o.id].total 
-    })).sort((a,b) => b.total - a.total);
+    })).sort((a,b) => b.total - a.total).filter(item => item.total > 0);
 
     let dataInjectorHtml = '';
     processedSequence.forEach((item, index) => {
+        // ?? INJEKSI ID unik (row-total-x) untuk diubah secara real-time
         dataInjectorHtml += `
             <div class="table-row-premium">
                 <div class="col-rank">${index + 1}</div>
                 <div class="col-identity"><i class="fa-solid ${item.icon}"></i> ${item.id}</div>
                 <div class="col-belopa">${item.belopa > 0 ? item.belopa.toLocaleString('id-ID') : '-'}</div>
                 <div class="col-walmas">${item.walmas > 0 ? item.walmas.toLocaleString('id-ID') : '-'}</div>
-                <div class="col-total">${item.total.toLocaleString('id-ID')}</div>
+                <div class="col-total" id="row-total-${index}">${item.total.toLocaleString('id-ID')}</div>
             </div>
         `;
     });
@@ -281,7 +283,7 @@ function compileAnalyticReporting(rawCollection) {
             <div class="col-identity">TOTAL KESELURUHAN</div>
             <div class="col-belopa">${sumBelopa > 0 ? sumBelopa.toLocaleString('id-ID') : '-'}</div>
             <div class="col-walmas">${sumWalmas > 0 ? sumWalmas.toLocaleString('id-ID') : '-'}</div>
-            <div class="col-total">${collectiveSum.toLocaleString('id-ID')}</div>
+            <div class="col-total" id="final-sum-total">${collectiveSum.toLocaleString('id-ID')}</div>
         </div>
     `;
 
@@ -290,9 +292,8 @@ function compileAnalyticReporting(rawCollection) {
     renderExecutiveBarChart(processedSequence);
 }
 
-function renderExecutiveBarChart(sortedSequence) {
+function renderExecutiveBarChart(subsetData) {
     const canvasElement = document.getElementById('analyticsBarChartEngine').getContext('2d');
-    let subsetData = sortedSequence.filter(item => item.total > 0); 
     
     let horizontalLabels = subsetData.map(i => i.id);
     let valBelopa = subsetData.map(i => i.belopa);
@@ -325,6 +326,7 @@ function renderExecutiveBarChart(sortedSequence) {
                         const index = legendItem.datasetIndex;
                         const ci = legend.chart;
                         
+                        // 1. Tampilkan / Sembunyikan Grafik
                         if (ci.isDatasetVisible(index)) {
                             ci.hide(index);
                             legendItem.hidden = true;
@@ -333,9 +335,39 @@ function renderExecutiveBarChart(sortedSequence) {
                             legendItem.hidden = false;
                         }
                         
+                        // 2. Tampilkan / Sembunyikan Kolom Tabel
                         const tableWrapper = document.querySelector('.table-wrapper-premium');
                         if (index === 0) tableWrapper.classList.toggle('hide-belopa', legendItem.hidden);
                         if (index === 1) tableWrapper.classList.toggle('hide-walmas', legendItem.hidden);
+
+                        // ?? 3. MESIN KALKULASI DINAMIS (Kecerdasan Buatan Enterprise)
+                        const showBelopa = ci.isDatasetVisible(0);
+                        const showWalmas = ci.isDatasetVisible(1);
+                        
+                        let grandTotalDynamic = 0;
+                        
+                        subsetData.forEach((item, idx) => {
+                            let dynamicRowTotal = 0;
+                            if (showBelopa) dynamicRowTotal += item.belopa;
+                            if (showWalmas) dynamicRowTotal += item.walmas;
+                            
+                            grandTotalDynamic += dynamicRowTotal;
+                            
+                            // A. Ubah angka kolom "Total Akumulasi" per baris
+                            const rowTotalEl = document.getElementById(`row-total-${idx}`);
+                            if (rowTotalEl) {
+                                rowTotalEl.innerText = dynamicRowTotal > 0 ? dynamicRowTotal.toLocaleString('id-ID') : '-';
+                            }
+                        });
+                        
+                        // B. Ubah angka besar di KPI atas
+                        document.getElementById('valKpiGrandTotal').innerText = grandTotalDynamic.toLocaleString('id-ID');
+                        
+                        // C. Ubah angka Total Keseluruhan di baris terakhir tabel
+                        const finalSumEl = document.getElementById('final-sum-total');
+                        if (finalSumEl) {
+                            finalSumEl.innerText = grandTotalDynamic.toLocaleString('id-ID');
+                        }
                     }
                 },
                 tooltip: { backgroundColor: '#0F172A', titleColor: '#FFFFFF', bodyColor: '#F8FAFC', padding: 12, cornerRadius: 8, mode: 'index', intersect: false }
@@ -347,6 +379,7 @@ function renderExecutiveBarChart(sortedSequence) {
         }
     });
     
+    // Reset status tabel jika ditarik data baru
     const tblWrap = document.querySelector('.table-wrapper-premium');
     if(tblWrap) { tblWrap.classList.remove('hide-belopa', 'hide-walmas'); }
 }
