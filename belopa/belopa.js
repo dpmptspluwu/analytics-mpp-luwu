@@ -292,7 +292,6 @@ function compileAnalyticReporting(rawCollection) {
 
 function renderExecutiveBarChart(sortedSequence) {
     const canvasElement = document.getElementById('analyticsBarChartEngine').getContext('2d');
-    
     let subsetData = sortedSequence.filter(item => item.total > 0); 
     
     let horizontalLabels = subsetData.map(i => i.id);
@@ -319,7 +318,26 @@ function renderExecutiveBarChart(sortedSequence) {
         options: {
             responsive: true, maintainAspectRatio: false,
             plugins: { 
-                legend: { display: true, position: 'top', labels: { usePointStyle: true, font: { family: 'Plus Jakarta Sans', weight: '700' } } },
+                legend: { 
+                    display: true, position: 'top', 
+                    labels: { usePointStyle: true, font: { family: 'Plus Jakarta Sans', weight: '700' } },
+                    onClick: function(e, legendItem, legend) {
+                        const index = legendItem.datasetIndex;
+                        const ci = legend.chart;
+                        
+                        if (ci.isDatasetVisible(index)) {
+                            ci.hide(index);
+                            legendItem.hidden = true;
+                        } else {
+                            ci.show(index);
+                            legendItem.hidden = false;
+                        }
+                        
+                        const tableWrapper = document.querySelector('.table-wrapper-premium');
+                        if (index === 0) tableWrapper.classList.toggle('hide-belopa', legendItem.hidden);
+                        if (index === 1) tableWrapper.classList.toggle('hide-walmas', legendItem.hidden);
+                    }
+                },
                 tooltip: { backgroundColor: '#0F172A', titleColor: '#FFFFFF', bodyColor: '#F8FAFC', padding: 12, cornerRadius: 8, mode: 'index', intersect: false }
             },
             scales: {
@@ -328,4 +346,7 @@ function renderExecutiveBarChart(sortedSequence) {
             }
         }
     });
+    
+    const tblWrap = document.querySelector('.table-wrapper-premium');
+    if(tblWrap) { tblWrap.classList.remove('hide-belopa', 'hide-walmas'); }
 }
