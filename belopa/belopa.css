@@ -1,6 +1,6 @@
 :root {
     --bg-primary: #FFFFFF; --bg-secondary: #F8F9FC;
-    --brand-primary: #1E3A8A; /* 👑 Warna Royal Blue Khas MPP Belopa */
+    --brand-primary: #1E3A8A; /* ðŸ‘‘ Warna Royal Blue Khas MPP Belopa */
     --brand-secondary: #D97706; --brand-walmas: #0D9488;
     --text-primary: #0F172A; --text-secondary: #475569;
     --border-color: #E2E8F0;
@@ -17,6 +17,20 @@ body {
     min-height: 100vh; 
     display: flex;
     flex-direction: column;
+    padding-bottom: 110px;
+
+    -webkit-user-select: none; 
+    -moz-user-select: none; 
+    -ms-user-select: none; 
+    user-select: none; 
+    -webkit-user-drag: none;
+}
+
+input {
+    -webkit-user-select: auto;
+    -moz-user-select: auto;
+    -ms-user-select: auto;
+    user-select: auto;
 }
 
 header { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border-color); padding: 16px 32px; position: sticky; top: 0; z-index: 1000; box-shadow: 0 1px 10px rgba(15, 23, 42, 0.02); }
