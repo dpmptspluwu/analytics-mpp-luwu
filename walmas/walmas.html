@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Sistem Informasi Pengunjung - MPP Walmas</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Montserrat:wght@700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+ 
+    <link rel="stylesheet" href="walmas.css">
+</head>
+<body>
+
+    <div id="dispatchToast" class="toast-dispatch">
+        <i id="toastIcon" class="fa-solid fa-circle-check"></i> 
+        <span id="toastMsg">Sistem Siaga!</span>
+    </div>
+
+    <header>
+        <div class="header-container">
+            <div class="brand-group">
+                <h1>Data <span>Pengunjung</span></h1>
+                <p>MPP Walmas Kab. Luwu</p>
+            </div>
+            <div class="nav-tabs">
+                <button class="nav-btn active" onclick="changeSection('input')" id="tabIncrementor"><i class="fa-solid fa-keyboard"></i> Pencatatan Data</button>
+                <button class="nav-btn" onclick="changeSection('report')" id="tabSynthesizer"><i class="fa-solid fa-file-shield"></i> Data Laporan</button>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-container">
+        <section id="sectionInput" class="page-section active">
+            <div class="premium-panel" style="display: flex; justify-content: space-between; align-items: center; padding: 12px 20px; flex-wrap: wrap; gap: 16px;">
+                <div style="display: flex; align-items: center; gap: 10px; flex: 1; min-width: 280px;">
+                    <label style="font-weight: 700; color: var(--brand-primary); font-size: 0.82rem; text-transform: uppercase;"><i class="fa-solid fa-magnifying-glass"></i> Cari Instansi:</label>
+                    <input type="text" id="opdSearchInput" class="input-date-premium" style="width: 100%; height: 36px;" placeholder="Ketik nama instansi pelayanan..." oninput="executeLocalSearch()">
+                </div>
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <label style="font-weight: 700; color: var(--brand-primary); font-size: 0.82rem; text-transform: uppercase;"><i class="fa-regular fa-calendar-check"></i> Tanggal:</label>
+                    <input type="date" id="operasionalDate" class="input-date-premium" style="width: 160px; height: 36px; font-weight: 700;">
+                </div>
+            </div>
+            <div class="grid-opd" id="cardContainerOPD"></div>
+        </section>
+
+        <section id="sectionReport" class="page-section">
+            <div class="premium-panel">
+                <h3 class="section-title">Parameter Rentang Laporan</h3>
+                <div class="filter-row">
+                    <div class="input-group-premium">
+                        <label>Periode Awal (Tanggal)</label>
+                        <input type="date" id="datetimeStart" class="input-date-premium">
+                    </div>
+                    <div class="input-group-premium">
+                        <label>Periode Akhir (Tanggal)</label>
+                        <input type="date" id="datetimeEnd" class="input-date-premium">
+                    </div>
+                </div>
+                <div class="action-button-group">
+                    <button class="btn-executive btn-process" id="btnRunQuery" onclick="executeCloudQuery()">
+                        <span id="labelQueryBtn"><i class="fa-solid fa-cloud-arrow-down"></i> SINKRONKAN DATA</span>
+                        <div class="loader-spinner" id="queryLoader"></div>
+                    </button>
+                    <button class="btn-executive btn-print-doc" id="btnPrintTrigger" style="display: none;" onclick="window.print()">
+                        <span><i class="fa-solid fa-print"></i> CETAK</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="analytics-results" id="analyticsVisualizerArea">
+                <div class="kpi-wrapper">
+                    <div class="kpi-metrics-label">REKAPITULASI TOTAL KUNJUNGAN PELAYANAN<p>MAL PELAYANAN PUBLIK KAB. LUWU</div>
+                    <div class="kpi-metrics-value" id="valKpiGrandTotal">0</div>
+                    <div class="kpi-temporal-info" id="labelTemporalScope">PERIODE PELAPORAN: -</div>
+                </div>
+                
+                <div class="chart-wrapper-box"><canvas id="analyticsBarChartEngine"></canvas></div>
+                
+                <div class="table-wrapper-premium">
+                    <div class="table-row-premium table-header-premium">
+                        <div class="col-rank">No</div>
+                        <div class="col-identity">Instansi Pelayanan</div>
+                        <div class="col-belopa">MPP Belopa</div>
+                        <div class="col-walmas">MPP Walmas</div>
+                        <div class="col-total">Total Akumulasi</div>
+                    </div>
+                    <div id="analyticsTableDataInjector"></div>
+                </div>
+            </div>
+        </section>
+
+        <div class="copyright-footer">
+            &copy; <span id="dynamicYear"></span> Mal Pelayanan Publik Kabupaten Luwu
+        </div>
+    </main>
+
+    <footer class="footer-action-bar" id="stickyFooterInput">
+        <div class="footer-metrics-total">
+            <span>Volume Kunjungan Hari Ini</span>
+            <strong id="labelLiveCalculatedTotal">0</strong>
+        </div>
+        <button class="btn-dispatch-cloud" id="btnTriggerCloudSave" onclick="dispatchDataToCloud()">
+            <i class="fa-solid fa-cloud-arrow-up"></i> SIMPAN DATA
+        </button>
+    </footer>
+
+    <script src="walmas.js"></script>
+</body>
+</html>
