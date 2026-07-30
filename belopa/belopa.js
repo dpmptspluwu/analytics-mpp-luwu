@@ -292,7 +292,8 @@ function compileAnalyticReporting(rawCollection) {
 
 function renderExecutiveBarChart(sortedSequence) {
     const canvasElement = document.getElementById('analyticsBarChartEngine').getContext('2d');
-    let subsetData = sortedSequence.slice(0, 10); 
+    
+    let subsetData = sortedSequence.filter(item => item.total > 0); 
     
     let horizontalLabels = subsetData.map(i => i.id);
     let valBelopa = subsetData.map(i => i.belopa);
