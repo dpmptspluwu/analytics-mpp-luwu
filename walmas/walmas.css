@@ -73,6 +73,9 @@ header { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(20px); bor
 @keyframes spinLoader { to { transform: rotate(360deg); } }
 @media (max-width: 768px) { header { padding: 12px 16px; } .header-container { flex-direction: column; gap: 10px; text-align: center; } .nav-tabs { max-width: 100%; } .main-container { padding: 16px 12px; } .grid-opd { grid-template-columns: repeat(auto-fill, minmax(100%, 1fr)); gap: 10px; } .footer-action-bar { padding: 12px 16px; flex-direction: column; gap: 12px; } .btn-dispatch-cloud { width: 100%; text-align: center; } .col-identity { flex: 1; } .col-belopa, .col-walmas { display: none; } .kpi-metrics-value { font-size: 2.2rem !important; } }
 
+.table-wrapper-premium.hide-belopa .col-belopa { display: none !important; }
+.table-wrapper-premium.hide-walmas .col-walmas { display: none !important; }
+
 @media print { 
     @page { size: auto; margin: 1.5cm; } 
     body { background: #FFFFFF !important; color: #000000 !important; padding: 0 !important; margin: 0 !important; font-size: 10pt !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; } 
