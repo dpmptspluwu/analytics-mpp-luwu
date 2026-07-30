@@ -85,17 +85,17 @@ header { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(20px); bor
     .kpi-temporal-info { color: #333333 !important; font-size: 9pt !important; font-weight: 600 !important; } 
     .chart-wrapper-box { display: block !important; position: relative !important; width: 100% !important; height: 280px !important; margin-bottom: 30px !important; border: 1px solid #94A3B8 !important; border-radius: 4px !important; padding: 10px !important; page-break-inside: avoid !important; box-shadow: none !important; } 
     .chart-wrapper-box canvas { width: 100% !important; height: 100% !important; } 
-    .table-wrapper-premium { display: table !important; width: 100% !important; border-collapse: collapse !important; border: 1px solid #000000 !important; box-shadow: none !important; }
-	.table-header-premium { display: table-header-group !important; background: #F1F5F9 !important; }
-	#analyticsTableDataInjector { display: table-row-group !important; }
-	.table-row-premium { display: table-row !important; page-break-inside: avoid !important; }
-	.table-row-premium > div { display: table-cell !important; padding: 8px 14px !important; vertical-align: middle !important; border-bottom: 1px solid #CBD5E1 !important; }
-	.table-header-premium > div { border-bottom: 2px solid #000000 !important; color: #000000 !important; font-weight: 800 !important; }
-	.table-row-premium:last-child > div { border-bottom: none !important; }
-	.col-rank { width: 5% !important; text-align: center !important; color: #000000 !important; font-weight: 800 !important; font-size: 9pt !important; }
-	.col-identity { width: 45% !important; text-align: left !important; color: #000000 !important; font-weight: 700 !important; font-size: 9pt !important; }
-	.col-identity i { display: none !important; } 
-	.col-belopa, .col-walmas { width: 15% !important; text-align: center !important; color: #000000 !important; font-weight: 600 !important; font-size: 9pt !important; }
-	.col-total { width: 20% !important; text-align: right !important; color: #000000 !important; font-weight: 800 !important; font-size: 9.5pt !important; }
-	.badge-belopa, .badge-walmas { border: none !important; padding: 0 !important; background: transparent !important; color: #000000 !important; font-size: 9pt !important; font-weight: 600 !important; }
+    .table-wrapper-premium { display: table !important; width: 100% !important; border-collapse: collapse !important; border: 1px solid #000000 !important; box-shadow: none !important; } 
+    #analyticsTableDataInjector { display: table-row-group !important; } 
+    .table-row-premium { display: table-row !important; page-break-inside: avoid !important; } 
+    .table-row-premium.table-header-premium { display: table-header-group !important; background: #F1F5F9 !important; } 
+    .table-row-premium > div { display: table-cell !important; padding: 8px 14px !important; vertical-align: middle !important; border-bottom: 1px solid #CBD5E1 !important; } 
+    .table-row-premium.table-header-premium > div { border-bottom: 2px solid #000000 !important; color: #000000 !important; font-weight: 800 !important; } 
+    .table-row-premium:last-child > div { border-bottom: none !important; } 
+    .col-rank { width: 5% !important; text-align: center !important; color: #000000 !important; font-weight: 800 !important; font-size: 9pt !important; } 
+    .col-identity { width: 45% !important; text-align: left !important; color: #000000 !important; font-weight: 700 !important; font-size: 9pt !important; } 
+    .col-identity i { display: none !important; } 
+    .col-belopa, .col-walmas { width: 15% !important; text-align: center !important; color: #000000 !important; font-weight: 600 !important; font-size: 9pt !important; } 
+    .col-total { width: 20% !important; text-align: right !important; color: #000000 !important; font-weight: 800 !important; font-size: 9.5pt !important; } 
+    .badge-belopa, .badge-walmas { border: none !important; padding: 0 !important; background: transparent !important; color: #000000 !important; font-size: 9pt !important; font-weight: 600 !important; } 
 }
